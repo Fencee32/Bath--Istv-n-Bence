@@ -1,39 +1,67 @@
-const container = document.getElementById("grid-container")
-const numbers = Array.from({ length: 12 }, (_, index) => index + 1)
-let clickedNumbers = []
+const container = document.getElementById("grid-container");
+const numbers = Array.from({ length: 12 }, (_, index) => index + 1);
+let clickedNumbers = [];
+let startButtonClicked = false;
+let ido=0;
+let timer;
 
-for (let i = 0; i < 12; i++) {
-  let pos1 = Math.floor(Math.random() * 12)
-  let pos2 = Math.floor(Math.random() * 12)
-  let temp = numbers[pos1]
-  numbers[pos1] = numbers[pos2]
-  numbers[pos2] = temp
+const startButton = document.createElement("button");
+startButton.innerHTML = "Start";
+startButton.addEventListener("click", function () {
+  startButtonClicked = true;
+  startButton.style.display = "none";
+  showNumbers();
+  startTimer();
+});
+
+container.appendChild(startButton);
+
+function showNumbers() {
+  shuffleNumbers();
+  for (let i = 0; i < 12; i++) {
+    const box = createBox(numbers[i]);
+    container.appendChild(box);
+  }
 }
 
-for (let i = 0; i < 12; i++) {
-  const box = createBox(numbers[i])
-  container.appendChild(box)
+function shuffleNumbers() {
+  for (let i = numbers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  }
 }
+
+function startTimer() {
+  timer = setInterval(function() {
+    ido++;
+    szamlalo.innerText = ido;
+  }, 100);
+}
+
+console.log(ido)
 
 function createBox(number) {
-  const box = document.createElement("div")
-  box.classList.add("box")
-  box.innerHTML = number
+  const box = document.createElement("div");
+  box.classList.add("box");
+  box.innerHTML = number;
 
   box.addEventListener("click", function () {
-    if (parseInt(box.innerHTML) === clickedNumbers.length + 1) {
-      clickedNumbers.push(parseInt(box.innerHTML))
-      box.style.visibility = "hidden"
+    if (startButtonClicked && parseInt(box.innerHTML) === clickedNumbers.length + 1) {
+      clickedNumbers.push(parseInt(box.innerHTML));
+      box.style.visibility = "hidden";
 
       if (clickedNumbers.length === numbers.length) {
-        alert("G to the G! Nulla killes fortnajt viktori rojal!")
-        location.reload()
+        clearInterval(timer);
+        alert("Congratulations! You completed the game!");
+        location.reload();
       }
-    } else {
-      alert("Nem jott ossze papito, menj pihenj a beke szigeten")
-      location.reload()
+    } else if (startButtonClicked) {
+      alert("Oops! Wrong number. Try again.");
+      location.reload();
     }
-  })
+  });
 
-  return box
+  return box;
 }
+
+
