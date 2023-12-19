@@ -6,7 +6,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 }
 
 .container {
@@ -30,4 +30,9 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-size: 50px;
+}
+
+#szamlalo {
+  text-align: center;
+  font-size: 40px;
 }
